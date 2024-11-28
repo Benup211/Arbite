@@ -17,4 +17,16 @@ export class AuthRepository {
             }
         })
     }
+    static async findUserById(user_id:number){
+        return await prisma.user.findUnique({
+            where:{
+                user_id
+            },
+            select:{
+                user_id:true,
+                username:true,
+                phone_no:true
+            }
+        })
+    }
 }

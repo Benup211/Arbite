@@ -65,4 +65,16 @@ export class AuthController {
             next(error);
         }
     }
+    static async getUser(req: Request, res: Response, next: NextFunction):Promise<any> {
+        try {
+            const user = await AuthRepository.findUserById(req.body.userID);
+            if(!user){
+                res.clearCookie("Token");
+                next(ResponseService.CreateErrorResponse("User not found",404));
+            }
+            return res.status(200).json(user);
+        } catch (error) {
+            next(error);
+        }
+    }
 }

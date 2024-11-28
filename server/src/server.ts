@@ -22,7 +22,7 @@ export class MainServer{
         this.server.use(express.urlencoded({ extended: true }));
         this.server.use(cookieParser());
         this.server.use(bodyParser.json());
-        this.server.use(cors({ origin: "http://localhost:5173" }));
+        this.server.use(cors({ origin: "http://localhost:8081",credentials:true }));
     }
 
     setRoutes(){
