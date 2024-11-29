@@ -1,11 +1,11 @@
 import { StyleSheet } from "react-native";
 
 export const s = StyleSheet.create({
-    container:{
-        flex:1,
-        justifyContent:"space-evenly",
-        alignItems:"center",
-        marginVertical:20,
+    container: {
+        flex: 1,
+        justifyContent: "space-evenly",
+        alignItems: "center",
+        marginVertical: 20,
     },
     logo: {
         justifyContent: "center",
@@ -25,45 +25,45 @@ export const s = StyleSheet.create({
         color: "#8B5CFF",
         textTransform: "uppercase",
     },
-    loginForm:{
+    loginForm: {
         width: "80%",
         justifyContent: "center",
         alignItems: "center",
         maxWidth: 400,
     },
-    welcome:{
+    welcome: {
         fontSize: 20,
         fontWeight: "bold",
         opacity: 0.7,
         textTransform: "uppercase",
-        color:"#8B5CFF"
+        color: "#8B5CFF",
     },
     input: {
-        width: '100%',
+        width: "100%",
         height: 50,
-        backgroundColor: '#fff',
+        backgroundColor: "#fff",
         borderRadius: 8,
         paddingHorizontal: 15,
         marginVertical: 10,
         borderWidth: 1,
-        borderColor: '#ddd',
-      },
-      button: {
-        width: '100%',
+        borderColor: "#ddd",
+    },
+    button: {
+        width: "100%",
         height: 50,
-        backgroundColor: '#8B5CFF',
+        backgroundColor: "#8B5CFF",
         borderRadius: 8,
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: "center",
+        alignItems: "center",
         marginVertical: 20,
-      },
-      buttonText: {
-        color: '#fff',
+    },
+    buttonText: {
+        color: "#fff",
         fontSize: 18,
-        fontWeight: 'bold',
-      },
-      registerLink: {
-        color: '#8B5CFF',
+        fontWeight: "bold",
+    },
+    registerLink: {
+        color: "#8B5CFF",
         marginTop: 10,
-      },
+    },
 });

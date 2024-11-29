@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Alert,Image } from "react-native";
 import { SafeAreaView } from "react-native";
 import { s } from "./Auth.style";
 import { useState } from "react";
@@ -19,8 +19,11 @@ export default function RegiserPage() {
         <SafeAreaView style={{ flex: 1 }}>
             <View style={s.container}>
                 <View style={s.logo}>
-                    <Text style={s.title}>Arbite</Text>
-                    <Text style={s.slogan}>Taste Innovation</Text>
+                    <Image
+                        source={require("../../assets/arbite.png")}
+                        resizeMode="contain"
+                        style={{ width: 200, height: 200 }}
+                    />
                 </View>
                 <View style={s.loginForm}>
                     <Text style={s.welcome}>Create Account.</Text>
@@ -56,7 +59,11 @@ export default function RegiserPage() {
                         <Text style={s.buttonText}>Log In</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => {navigation.navigate("Login" as never)}}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate("Login" as never);
+                        }}
+                    >
                         <Text style={s.registerLink}>
                             Already have an account? Login
                         </Text>

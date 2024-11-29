@@ -1,4 +1,11 @@
-import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import {
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    Alert,
+    Image,
+} from "react-native";
 import { SafeAreaView } from "react-native";
 import { s } from "./Auth.style";
 import { useState } from "react";
@@ -23,12 +30,15 @@ export default function LoginPage() {
             <View style={s.container}>
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate("Admin" as never);
+                        navigation.navigate("Admin Login" as never);
                     }}
                 >
                     <View style={s.logo}>
-                        <Text style={s.title}>Arbite</Text>
-                        <Text style={s.slogan}>Taste Innovation</Text>
+                        <Image
+                            source={require("../../assets/arbite.png")}
+                            resizeMode="contain"
+                            style={{ width: 200, height: 200 }}
+                        />
                     </View>
                 </TouchableOpacity>
                 <View style={s.loginForm}>

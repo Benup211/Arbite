@@ -1,8 +1,8 @@
-import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Alert,Image } from "react-native";
 import { SafeAreaView } from "react-native";
 import { s } from "./Auth.style";
 import { useState } from "react";
-import {useNavigation} from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native";
 export default function AdminLogin() {
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
@@ -22,8 +22,11 @@ export default function AdminLogin() {
         <SafeAreaView style={{ flex: 1 }}>
             <View style={s.container}>
                 <View style={s.logo}>
-                    <Text style={s.title}>Arbite</Text>
-                    <Text style={s.slogan}>Taste Innovation</Text>
+                    <Image
+                        source={require("../../assets/arbite.png")}
+                        resizeMode="contain"
+                        style={{ width: 200, height: 200 }}
+                    />
                 </View>
                 <View style={s.loginForm}>
                     <Text style={s.welcome}>Admin Login.</Text>
@@ -47,10 +50,12 @@ export default function AdminLogin() {
                         <Text style={s.buttonText}>Log In</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => {navigation.navigate("Login" as never)}}>
-                        <Text style={s.registerLink}>
-                            Back to User Login
-                        </Text>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate("Login" as never);
+                        }}
+                    >
+                        <Text style={s.registerLink}>Back to User Login</Text>
                     </TouchableOpacity>
                 </View>
             </View>
