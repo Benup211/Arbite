@@ -33,6 +33,7 @@ export default function AdminLogin() {
                     <TextInput
                         style={s.input}
                         placeholder="Username"
+                        placeholderTextColor={"#666"}
                         keyboardType="default"
                         value={userName}
                         onChangeText={setUserName}
@@ -41,6 +42,7 @@ export default function AdminLogin() {
                     <TextInput
                         style={s.input}
                         placeholder="Password"
+                        placeholderTextColor={"#666"}
                         secureTextEntry
                         value={password}
                         onChangeText={setPassword}

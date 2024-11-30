@@ -1,8 +1,9 @@
 import {View,Text} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 export default function Restaurant() {
     return(
-        <View>
+        <SafeAreaView>
             <Text>Restaurant</Text>
-        </View>
+        </SafeAreaView>
     );
 }

@@ -45,10 +45,10 @@ function MainNavigator() {
         <AuthStack.Navigator screenOptions={{
             headerShown: false
         }}>
+            <AuthStack.Screen name="Admin" component={AdminGroup} />
             <AuthStack.Screen name="Login" component={LoginPage} />
             <AuthStack.Screen name="Register" component={RegiserPage} />
             <AuthStack.Screen name="Admin Login" component={AdminLogin} />
-            <AuthStack.Screen name="Admin" component={AdminGroup} />
         </AuthStack.Navigator>
     )
 }
