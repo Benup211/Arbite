@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { DataTable } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import UserCard from "../../components/admin/UserCard";
 export default function RegisteredUser() {
     const users = [
         {
@@ -34,33 +35,17 @@ export default function RegisteredUser() {
     return (
         <SafeAreaView>
             <ScrollView>
-                <View>
-                    <DataTable>
-                        <DataTable.Header style={{alignItems:'flex-start',justifyContent:'flex-start'}}>
-                            <DataTable.Title><Text style={{color:'gray',fontWeight:'semibold',textTransform:'uppercase'}}>Username</Text></DataTable.Title>
-                            <DataTable.Title numeric>
-                            <Text style={{color:'gray',fontWeight:'semibold',textTransform:'uppercase'}}>Phone Number</Text>
-                            </DataTable.Title>
-                        </DataTable.Header>
-                        <DataTable.Row
-                            style={{ borderWidth: 0, borderBottomWidth: 2 }}
-                        >
-                            <DataTable.Cell>John Doe</DataTable.Cell>
-                            <DataTable.Cell numeric>25</DataTable.Cell>
-                        </DataTable.Row>
-                        <DataTable.Row>
-                            <DataTable.Cell>Jane Smith</DataTable.Cell>
-                            <DataTable.Cell numeric>30</DataTable.Cell>
-                        </DataTable.Row>
-                        <DataTable.Row>
-                            <DataTable.Cell>Olu Ola</DataTable.Cell>
-                            <DataTable.Cell numeric>39</DataTable.Cell>
-                        </DataTable.Row>
-                    </DataTable>
+                <View style={s.users}>
+                    <UserCard username="benup" number="9861245228"/>
+                    <UserCard username="benup" number="9861245228"/>
                 </View>
             </ScrollView>
         </SafeAreaView>
     );
 }
 
-const styles = StyleSheet.create({});
+const s = StyleSheet.create({
+    users:{
+        padding:10
+    }
+});
