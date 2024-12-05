@@ -16,4 +16,22 @@ export class AdminRepository {
             }
         })
     }
+    static async findAdminById(admin_id:number){
+        return await prisma.admin.findUnique({
+            where:{
+                admin_id
+            }
+        })
+    }
+    static async findAllUsers(){
+        return await prisma.user.findMany(
+            {
+                select:{
+                    user_id:true,
+                    username:true,
+                    phone_no:true
+                }
+            }
+        );
+    }
 }

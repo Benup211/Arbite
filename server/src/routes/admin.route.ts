@@ -8,7 +8,10 @@ class AdminAuthRoute {
         this.getRoutes();
         this.postRoutes();
     }
-    getRoutes() {}
+    getRoutes() {
+        this.router.get('/getAdmin',GlobalMiddleware.CheckAdminAuth,AdminController.getAdmin);
+        this.router.get('/allUsers',GlobalMiddleware.CheckAdminAuth,AdminController.getAllUsers);
+    }
     postRoutes() {
         this.router.post(
             "/login",

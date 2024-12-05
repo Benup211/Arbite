@@ -43,7 +43,13 @@ export class GlobalMiddleware {
         next: NextFunction
     ) {
         try {
-            const token = req.cookies.AdminToken;
+            let token = req.cookies.AdminToken;
+            if (!token) {
+                const authHeader = req.headers.authorization;
+                if (authHeader && authHeader.startsWith("Bearer ")) {
+                    token = authHeader.split(" ")[1];
+                }
+            }
             if (!token) {
                 next(ResponseService.CreateErrorResponse("Unauthorized", 401));
             }

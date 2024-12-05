@@ -46,13 +46,17 @@ export class AuthController {
                     )
                 );
             }
-            await JwtService.sign(
+            const token=await JwtService.sign(
                 res,
                 { userID: user.user_id },
                 process.env.JWT_SECRET as string,
                 { expiresIn: "7d" }
             );
-            return res.status(200).json({ message: "Login successful" });
+            return res.status(200).json({ token:token,user:{
+                id:user.user_id,
+                username:user.username,
+                phoneno:user.phone_no
+            },message: "Login successful" });
         } catch (error) {
             next(error);
         }
@@ -72,7 +76,13 @@ export class AuthController {
                 res.clearCookie("Token");
                 next(ResponseService.CreateErrorResponse("User not found",404));
             }
-            return res.status(200).json(user);
+            return res.status(200).json({
+                user: {
+                    id: user?.user_id,
+                    username: user?.username,
+                    phoneno: user?.phone_no,
+                },
+            });
         } catch (error) {
             next(error);
         }
