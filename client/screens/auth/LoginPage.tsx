@@ -10,20 +10,43 @@ import { SafeAreaView } from "react-native";
 import { s } from "./Auth.style";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useTokenStore } from "../../state/Token.state";
+import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function LoginPage() {
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const navigation = useNavigation();
-    const handleLogin = () => {
+    const {loading,loginUser}=useTokenStore();
+    const handleLogin = async() => {
         if (!userName || !password) {
             Alert.alert("Error", "Please fill in all fields");
             return;
         }
-
-        // Replace with your actual login API call
-        console.log("Login attempt:", { userName, password });
-        // Simulate successful login:
-        Alert.alert("Success", `Welcome, ${userName}`);
+        try{
+            const token=await loginUser(userName,password);
+            if(token){
+                Toast.show({
+                    type: "success",
+                    position: "top",
+                    text1: "Success",
+                    text2: "Logged in successfully",
+                    visibilityTime: 4000,
+                });
+                await AsyncStorage.setItem("userToken",token);
+                navigation.navigate("User" as never);
+            }
+        }catch(error:any){
+            console.error(error);
+            const errorMessage = error.response?.data?.errorMessage || "An error occurred";
+            Toast.show({
+                type: "error",
+                position: "top",
+                text1: "Error",
+                text2: errorMessage,
+                visibilityTime: 4000,
+            });
+        }
     };
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -61,7 +84,7 @@ export default function LoginPage() {
                         onChangeText={setPassword}
                     />
 
-                    <TouchableOpacity style={s.button} onPress={handleLogin}>
+                    <TouchableOpacity style={s.button} onPress={handleLogin} disabled={loading}>
                         <Text style={s.buttonText}>Log In</Text>
                     </TouchableOpacity>
 

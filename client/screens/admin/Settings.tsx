@@ -1,7 +1,9 @@
 import { View, Text, StyleSheet, SafeAreaView } from "react-native";
-import LogoutCard from "../../components/admin/LogoutCard";
+import AdminLogoutCard from "../../components/admin/LogoutCard";
+import { useTokenStore } from "../../state/Token.state";
 
-function AdminSettings() {
+function AdminSettings({navigation}:{navigation:any}) {
+    const {adminToken}=useTokenStore();
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.roundedEdge} />
@@ -13,7 +15,7 @@ function AdminSettings() {
                     </Text>
                 </View>
                 <View>
-                    <LogoutCard />
+                    <AdminLogoutCard navigate={navigation}/>
                 </View>
             </View>
         </SafeAreaView>

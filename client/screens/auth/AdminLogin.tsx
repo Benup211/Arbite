@@ -1,23 +1,95 @@
-import { View, Text, TextInput, TouchableOpacity, Alert,Image } from "react-native";
+import {
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    Alert,
+    Image,
+} from "react-native";
 import { SafeAreaView } from "react-native";
 import { s } from "./Auth.style";
 import { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-export default function AdminLogin() {
+import { useEffect } from "react";
+import { useTokenStore } from "../../state/Token.state";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import ApiManager from "../../api/ApiManager";
+import Toast from "react-native-toast-message";
+export default function AdminLogin({ navigation }: { navigation: any }) {
+    const { isAdminAuthenticated, checkAdminAuth, adminLogin,setAdminToken } =
+        useTokenStore();
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
-    const navigation = useNavigation();
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (!userName || !password) {
             Alert.alert("Error", "Please fill in all fields");
             return;
         }
-
-        // Replace with your actual login API call
-        console.log("Login attempt:", { userName, password });
-        // Simulate successful login:
-        Alert.alert("Success", `Welcome, ${userName}`);
+        try {
+            Toast.show({
+                type: "info",
+                position: "top",
+                text1: "Logging in",
+                text2: "Please wait...",
+                visibilityTime: 4000,
+            });
+            const token = await adminLogin(userName, password);
+            if (token) {
+                Toast.show({
+                    type: "success",
+                    position: "top",
+                    text1: "Success",
+                    text2: "Logged in successfully",
+                    visibilityTime: 4000,
+                });
+                await AsyncStorage.setItem("adminToken", token);
+                navigation.navigate("Admin" as never);
+            }
+        } catch (error: any) {
+            const errorMessage =
+                error.response?.data?.errorMessage || "An error occurred";
+            Toast.show({
+                type: "error",
+                position: "top",
+                text1: "Error",
+                text2: errorMessage,
+                visibilityTime: 4000,
+            });
+        }
     };
+    useEffect(() => {
+        const checkAdmin = async () => {
+            const adminToken = await AsyncStorage.getItem("adminToken");
+            if (adminToken) {
+                try {
+                    await checkAdminAuth(adminToken).finally(()=>{
+                        Toast.show({
+                            type: "success",
+                            position: "top",
+                            text1: "Success",
+                            text2: "Logged in successfully",
+                            visibilityTime: 4000,
+                        }),
+                        setAdminToken(adminToken as string),
+                        navigation.navigate("Admin" as never)
+                    }
+                    );
+                } catch (error:any) {
+                    const errorMessage =
+                        error.response?.data?.errorMessage ||
+                        "An error occurred";
+                    Toast.show({
+                        type: "error",
+                        position: "top",
+                        text1: "Error",
+                        text2: errorMessage,
+                        visibilityTime: 4000,
+                    });
+                    setAdminToken("");
+                }
+            }
+        };
+        checkAdmin();
+    }, []);
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={s.container}>

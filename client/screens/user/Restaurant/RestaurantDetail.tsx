@@ -10,7 +10,7 @@ const restaurant = {
     image: "https://example.com/restaurant.jpg",
 };
 
-export default function RestaurantDetail() {
+export default function UserRestaurantDetail() {
     return (
         <ScrollView>
             <SafeAreaView style={styles.container}>
