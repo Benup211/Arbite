@@ -9,35 +9,55 @@ import {
 import { DataTable } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UserCard from "../../components/admin/UserCard";
+import { useEffect, useState } from "react";
+import { useUsersStore, UserProps } from "../../state/admin/Users.state";
+import { useTokenStore } from "../../state/Token.state";
+import Toast from "react-native-toast-message";
 export default function RegisteredUser() {
-    const users = [
-        {
-            id: 1,
-            username: "John Doe",
-            phoneNumber: "1234567890",
-        },
-        {
-            id: 2,
-            username: "Jane Doe",
-            phoneNumber: "1234567890",
-        },
-        {
-            id: 3,
-            username: "John Smith",
-            phoneNumber: "1234567890",
-        },
-        {
-            id: 4,
-            username: "Jane Smith",
-            phoneNumber: "1234567890",
-        },
-    ];
+    const { getUsers, users,loadingUsers,setLoadingUsers } = useUsersStore();
+    const { adminToken } = useTokenStore();
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                await getUsers(adminToken).finally(() => {
+                    setLoadingUsers(false);
+                });
+            } catch (error: any) {
+                const errorMessage =
+                    error.response?.data?.errorMessage || "An error occurred";
+                Toast.show({
+                    type: "error",
+                    position: "top",
+                    text1: "Error",
+                    text2: errorMessage,
+                    visibilityTime: 4000,
+                });
+            }
+        };
+        fetchUsers();
+    }, []);
+    if(loadingUsers){
+        return(
+            <SafeAreaView style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                <ScrollView>
+                    <View style={{}}>
+                        <Text>Loading...</Text>
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
+        );
+    }
     return (
         <SafeAreaView>
             <ScrollView>
                 <View style={s.users}>
-                    <UserCard username="benup" number="9861245228"/>
-                    <UserCard username="benup" number="9861245228"/>
+                    {users.map((user, index) => (
+                        <UserCard
+                            key={index}
+                            username={user.username}
+                            number={user.phone_no}
+                        />
+                    ))}
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -45,7 +65,7 @@ export default function RegisteredUser() {
 }
 
 const s = StyleSheet.create({
-    users:{
-        padding:10
-    }
+    users: {
+        padding: 10,
+    },
 });

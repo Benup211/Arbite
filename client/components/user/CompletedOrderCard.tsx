@@ -1,11 +1,13 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 const CompletedOrderCard = ({
+    order_id,
     restaurantName,
     orderBy,
     orderTime,
     navigation,
 }: {
+    order_id:number
     restaurantName: string;
     orderBy: string;
     orderTime: Date;
@@ -15,6 +17,7 @@ const CompletedOrderCard = ({
         <TouchableOpacity
             onPress={() => {
                 navigation.navigate("Completed Lunch Orders" as never,{
+                    order_id:order_id,
                     restaurantName:restaurantName,
                     orderBy:orderBy,
                     orderTime:orderTime.toDateString(),

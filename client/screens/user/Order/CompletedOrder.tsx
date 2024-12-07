@@ -6,39 +6,73 @@ import {
     TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React from "react";
+import React, { useEffect } from "react";
 import CompletedOrderCard from "../../../components/user/CompletedOrderCard";
+import { useTokenStore } from "../../../state/Token.state";
+import { useOrderStore } from "../../../state/user/Order.state";
+import Toast from "react-native-toast-message";
 export default function CompletedOrders({ navigation }: { navigation: any }) {
-    const orders=[
-        {
-            restaurantName:"restaurant1",
-            orderBy:"user1",
-            orderTime:new Date(),
-        },
-        {
-            restaurantName:"restaurant2",
-            orderBy:"user2",
-            orderTime:new Date(),
-        },
-        {
-            restaurantName:"restaurant3",
-            orderBy:"user3",
-            orderTime:new Date(),
-        },
-    ]
+    const { getCompletedOrders, completedOrders, loadingOrders, setLoadingOrders } =
+        useOrderStore();
+    const { token } = useTokenStore();
+    useEffect(() => {
+        const fetchOrders = async () => {
+            try {
+                await getCompletedOrders(token).finally(() => {
+                    setLoadingOrders(false);
+                });
+            } catch (error: any) {
+                const errorMessage =
+                    error.response?.data?.errorMessage || "An error occurred";
+                Toast.show({
+                    type: "error",
+                    position: "top",
+                    text1: "Error",
+                    text2: errorMessage,
+                    visibilityTime: 4000,
+                });
+            }
+        };
+        fetchOrders();
+    }, []);
+    if (loadingOrders) {
+        return (
+            <SafeAreaView
+                style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+            >
+                <ScrollView>
+                    <View style={{}}>
+                        <Text>Loading...</Text>
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
+        );
+    }
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
                 <View style={s.restaurants}>
-                    {orders.map((order, index) => (
+                    {completedOrders.map((order, index) => (
                         <CompletedOrderCard
                             key={index}
-                            restaurantName={order.restaurantName}
-                            orderBy={order.orderBy}
-                            orderTime={order.orderTime}
+                            order_id={order.order_id}
+                            restaurantName={order.restaurant.name}
+                            orderBy={order.ordered_by_user.username}
+                            orderTime={new Date(order.timestamp)}
                             navigation={navigation}
                         />
                     ))}
+                    {completedOrders.length === 0 && (
+                        <View style={{ alignItems: "center", marginTop: 20 }}>
+                        <Text style={{ fontSize: 16, color: "#fff" }}>
+                            No Orders Completed
+                        </Text>
+                    </View>
+                    )}
                 </View>
             </ScrollView>
         </SafeAreaView>

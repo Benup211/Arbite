@@ -8,25 +8,44 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import OrderCard from "../../../components/user/OrderCard";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React from "react";
+import React, { useEffect } from "react";
+import { useOrderStore } from "../../../state/user/Order.state";
+import { useTokenStore } from "../../../state/Token.state";
+import Toast from "react-native-toast-message";
 export default function UserOrders({ navigation }: { navigation: any }) {
-    const orders=[
-        {
-            restaurantName:"restaurant1",
-            orderBy:"user1",
-            orderTime:new Date(),
-        },
-        {
-            restaurantName:"restaurant2",
-            orderBy:"user2",
-            orderTime:new Date(),
-        },
-        {
-            restaurantName:"restaurant3",
-            orderBy:"user3",
-            orderTime:new Date(),
-        },
-    ]
+    const {getOngoingOrders,orders,loadingOrders,setLoadingOrders}=useOrderStore();
+    const {token}=useTokenStore();
+    useEffect(()=>{
+        const fetchOrders=async()=>{
+            try{
+                await getOngoingOrders(token).finally(()=>{
+                    setLoadingOrders(false);
+                });
+            }catch(error:any){
+                const errorMessage =
+                    error.response?.data?.errorMessage || "An error occurred";
+                Toast.show({
+                    type: "error",
+                    position: "top",
+                    text1: "Error",
+                    text2: errorMessage,
+                    visibilityTime: 4000,
+                });
+            }
+        }
+        fetchOrders();
+    },[])
+    if(loadingOrders){
+        return(
+            <SafeAreaView style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                <ScrollView>
+                    <View style={{}}>
+                        <Text>Loading...</Text>
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
+        );
+    }
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
@@ -34,12 +53,21 @@ export default function UserOrders({ navigation }: { navigation: any }) {
                     {orders.map((order, index) => (
                         <OrderCard
                             key={index}
-                            restaurantName={order.restaurantName}
-                            orderBy={order.orderBy}
-                            orderTime={order.orderTime}
+                            order_id={order.order_id}
+                            restaurantName={order.restaurant.name}
+                            orderBy={order.ordered_by_user.username}
+                            order_user_id={order.ordered_by_user.user_id}
+                            orderTime={new Date(order.timestamp)}
                             navigation={navigation}
                         />
                     ))}
+                    {orders.length === 0 && (
+                        <View style={{ alignItems: "center", marginTop: 20 }}>
+                        <Text style={{ fontSize: 16, color: "#fff" }}>
+                            Empty! Tap on floating icon to Add Order
+                        </Text>
+                    </View>
+                    )}
                 </View>
             </ScrollView>
             <TouchableOpacity

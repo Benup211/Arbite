@@ -1,11 +1,13 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 const RestaurantCard = ({
+    id,
     name,
     location,
     number,
     navigation,
 }: {
+    id:number
     name: string;
     location: string;
     number: string;
@@ -13,7 +15,9 @@ const RestaurantCard = ({
 }) => {
     return (
         <TouchableOpacity onPress={()=>{
-            navigation.navigate("Restaurant Detail" as never)
+            navigation.navigate("Restaurant Detail" as never,{
+                id:id,
+            })
         }}>
             <View style={s.container}>
                 <Ionicons

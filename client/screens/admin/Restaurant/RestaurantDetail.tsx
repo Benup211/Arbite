@@ -2,22 +2,28 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Text } from "react-native-paper";
 import React from "react";
 import { View, Image, StyleSheet, ScrollView } from "react-native";
+import { useRestaurantStore,RestaurantProps } from "../../../state/Restaurant.state";
 
-const restaurant = {
-    name: "The Great Restaurant",
-    location: "123 Main St, Anytown, USA",
-    phone: "(123) 456-7890",
-    image: "https://example.com/restaurant.jpg",
-};
 
-export default function RestaurantDetail() {
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+export default function RestaurantDetail({route}: {route: any}) {
+    const { id } = route.params;
+    const {restaurants}=useRestaurantStore();
+    const restaurant: RestaurantProps | undefined = restaurants.find((restaurant) => restaurant.restaurant_id === id);
+    if (!restaurant) {
+        return (
+            <SafeAreaView style={styles.container}>
+                <Text style={styles.title}>Restaurant not found</Text>
+            </SafeAreaView>
+        );
+    }
     return (
         <ScrollView>
             <SafeAreaView style={styles.container}>
             <Text style={styles.title}>{restaurant.name}</Text>
             <Text style={styles.text}>{restaurant.location}</Text>
-            <Text style={styles.text}>{restaurant.phone}</Text>
-            <Image source={{ uri: restaurant.image }} style={styles.image} />
+            <Text style={styles.text}>{restaurant.phone_no}</Text>
+            <Image source={{ uri: `${apiUrl}/${restaurant.menu_image}` }} style={styles.image}resizeMode="contain" />
         </SafeAreaView>
         </ScrollView>
     );
@@ -45,6 +51,5 @@ const styles = StyleSheet.create({
         width: "100%",
         height: 600,
         marginTop: 16,
-        backgroundColor: "red",
     },
 });

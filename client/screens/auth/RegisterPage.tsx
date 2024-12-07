@@ -50,7 +50,6 @@ export default function RegiserPage() {
                 navigation.navigate("Login" as never);
             }      
         }catch(error: any){
-            console.error(error);
             const errorMessage = error.response?.data?.errorMessage || "An error occurred";
             Toast.show({
                 type: "error",

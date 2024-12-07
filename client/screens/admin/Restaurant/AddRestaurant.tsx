@@ -14,13 +14,14 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import axios from "axios";
+import Toast from "react-native-toast-message";
 
-const AddRestaurant = () => {
+const AddRestaurant = ({navigation}:{navigation:any}) => {
     const [name, setName] = useState("");
     const [location, setLocation] = useState("");
     const [number, setNumber] = useState("");
     const [image, setImage] = useState<string | null>(null);
-
+    const apiUrl = process.env.EXPO_PUBLIC_API_URL;
     const pickImage = async () => {
         const permissionResult =
             await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -46,9 +47,9 @@ const AddRestaurant = () => {
         const formData = new FormData();
         formData.append("name", name);
         formData.append("location", location);
-        formData.append("number", number);
+        formData.append("phone_no", number);
         if (image) {
-            formData.append("image", {
+            formData.append("menu_image", {
                 uri: image,
                 type: "image/jpeg",
                 name: "photo.jpg",
@@ -57,7 +58,7 @@ const AddRestaurant = () => {
 
         try {
             const response = await axios.post(
-                "http://your-backend-url/api/submit",
+                `${apiUrl}/api/admin/addRestaurant`,
                 formData,
                 {
                     headers: {
@@ -65,9 +66,23 @@ const AddRestaurant = () => {
                     },
                 }
             );
-            console.log(response.data);
-        } catch (error) {
-            console.error(error);
+            Toast.show({
+                type: "success",
+                position: "top",
+                text1: "Success",
+                text2: "Restaurant added successfully",
+                visibilityTime: 4000,
+            })
+            navigation.navigate("Restaurant" as never);
+        } catch (error:any) {
+            const errorMessage = error.response?.data?.errorMessage || "An error occurred";
+            Toast.show({
+                type: "error",
+                position: "top",
+                text1: "Error",
+                text2: errorMessage,
+                visibilityTime: 4000,
+            });
         }
     };
 

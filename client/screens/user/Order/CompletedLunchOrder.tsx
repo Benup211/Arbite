@@ -1,8 +1,13 @@
-import { Text, ScrollView, StyleSheet, View } from "react-native";
+import { Text, ScrollView, StyleSheet, View, SafeAreaView } from "react-native";
 import FoodOrderCard from "../../../components/user/FoodOrderCard";
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useTokenStore } from "../../../state/Token.state";
+import useLunchOrderStore from "../../../state/user/Lunch.order.state";
+import { useEffect } from "react";
+import Toast from "react-native-toast-message";
 
 type LunchOrdersParams = {
+    order_id:number
     restaurantName: string;
     orderBy: string;
     orderTime: string;
@@ -11,7 +16,40 @@ type LunchOrdersParams = {
 type LunchOrdersScreenProps = NativeStackScreenProps<{ CompletedLunchOrder: LunchOrdersParams }>;
 
 const CompletedLunchOrder: React.FC<LunchOrdersScreenProps> = ({ route }) => {
-    const { restaurantName, orderBy, orderTime } = route.params as LunchOrdersParams;
+    const { restaurantName, orderBy, orderTime,order_id } =  route.params as LunchOrdersParams;
+    const {user,token}=useTokenStore();
+    const {completeLunchOrders,getCompleteOrders,setLoadingCompleteLunchOrders,loadingCompleteLunchOrders,setCompletingOrder,completeOrder}=useLunchOrderStore();
+    useEffect(()=>{
+        const fetchOrders=async()=>{
+            try{
+                await getCompleteOrders(token,order_id).finally(()=>{
+                    setLoadingCompleteLunchOrders(false);
+                });
+            }catch(error:any){
+                const errorMessage =
+                    error.response?.data?.errorMessage || "An error occurred";
+                Toast.show({
+                    type: "error",
+                    position: "top",
+                    text1: "Error",
+                    text2: errorMessage,
+                    visibilityTime: 4000,
+                });
+            }
+        }
+        fetchOrders();
+    },[])
+    if(loadingCompleteLunchOrders){
+        return(
+            <SafeAreaView style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                <ScrollView>
+                    <View style={{}}>
+                        <Text>Loading...</Text>
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
+        );
+    }
     return (
         <ScrollView>
             <View style={styles.container}>
@@ -20,10 +58,21 @@ const CompletedLunchOrder: React.FC<LunchOrdersScreenProps> = ({ route }) => {
                 <Text style={styles.text}>{orderTime}</Text>
             </View>
             <View style={styles.orders}>
-                <FoodOrderCard/>
-                <FoodOrderCard/>
-                <FoodOrderCard/>
-                <FoodOrderCard/>
+            {completeLunchOrders.map((order, index) => (
+                    <FoodOrderCard
+                        key={index}
+                        lunchOrder={order.lunchOrder}
+                        orderBy={order.user.username}
+                        tea={order.tea}
+                    />
+                ))}
+                {completeLunchOrders.length === 0 && (
+                    <View style={{ alignItems: "center", marginTop: 20 }}>
+                        <Text style={{ fontSize: 16, color: "#fff" }}>
+                            Empty Lunch Orders
+                        </Text>
+                    </View>
+                )}
             </View>
         </ScrollView>
     );

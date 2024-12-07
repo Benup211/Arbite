@@ -2,7 +2,15 @@ import { View, StyleSheet, Text } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";
-export default function foodOrderCard() {
+export default function foodOrderCard({
+    lunchOrder,
+    orderBy,
+    tea,
+}: {
+    lunchOrder: string;
+    orderBy: string;
+    tea: boolean;
+}) {
     return (
         <View style={s.container}>
             <View>
@@ -10,13 +18,15 @@ export default function foodOrderCard() {
             </View>
             <View style={s.order}>
                 <View style={s.lunch}>
-                    <Text style={s.food}>Momo</Text>
-                    <Text style={s.orderBy}>Order By:benup211</Text>
+                    <Text style={s.food}>{lunchOrder}</Text>
+                    <Text style={s.orderBy}>Order By:{orderBy}</Text>
                 </View>
-                <View style={s.tea}>
-                    <AntDesign name="plus" size={14} color="#8B5CFF" />
-                    <Feather name="coffee" size={32} color="#8B5CFF" />
-                </View>
+                {tea && (
+                    <View style={s.tea}>
+                        <AntDesign name="plus" size={14} color="#8B5CFF" />
+                        <Feather name="coffee" size={32} color="#8B5CFF" />
+                    </View>
+                )}
             </View>
         </View>
     );
@@ -46,19 +56,19 @@ const s = StyleSheet.create({
         justifyContent: "center",
         alignItems: "flex-start",
     },
-    tea:{
+    tea: {
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        gap:2
+        gap: 2,
     },
-    food:{
-        fontSize:16,
-        fontWeight:'bold',
-        color:'#fff'
+    food: {
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "#fff",
     },
-    orderBy:{
-        fontSize:14,
-        color:'gray'
-    }
+    orderBy: {
+        fontSize: 14,
+        color: "gray",
+    },
 });

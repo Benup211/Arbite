@@ -8,7 +8,7 @@ interface TokenState {
     adminToken: string;
     setAdminToken: (adminToken: string) => void;
     user:{
-        id:string,
+        id:number,
         username:string,
         phoneno:string,
     },
@@ -16,7 +16,7 @@ interface TokenState {
         id:string,
         username:string,
     }
-    setUser: (user: {id:string,username:string,phoneno:string}) => void;
+    setUser: (user: {id:number,username:string,phoneno:string}) => void;
     isAuthenticating: boolean;
     isAuthenticated: boolean;
     isAdminAuthenticated:boolean;
@@ -38,7 +38,7 @@ export const useTokenStore = create<TokenState>((set) => ({
     setAdminToken: (adminToken) => set({adminToken}),
 
     user:{
-        id:'',
+        id:0,
         username:'',
         phoneno:'',
     },
