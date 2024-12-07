@@ -34,4 +34,27 @@ export class AdminRepository {
             }
         );
     }
+    static async AddRestaurant(name:string,phone_no:string,menu_image:string,location:string){
+        return await prisma.restaurant.create({
+            data:{
+                name,
+                phone_no,
+                menu_image,
+                location
+            }
+        });
+    }
+    static async findAllRestaurants(){
+        return await prisma.restaurant.findMany(
+            {
+                select:{
+                    restaurant_id:true,
+                    name:true,
+                    phone_no:true,
+                    location:true,
+                    menu_image:true
+                }
+            }
+        );
+    }
 }

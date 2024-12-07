@@ -44,8 +44,13 @@ model Order {
   timestamp          DateTime     @default(now())
   restaurant         Restaurant   @relation(fields: [restaurant_id], references: [restaurant_id])
   restaurant_id      Int
-  status             String
+  status             OrderStatus @default(ongoing)
   lunchOrders        LunchOrder[]
+}
+
+enum OrderStatus {
+  ongoing
+  completed
 }
 
 model LunchOrder {

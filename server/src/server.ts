@@ -23,6 +23,7 @@ export class MainServer{
         this.server.use(cookieParser());
         this.server.use(bodyParser.json());
         this.server.use(cors({ origin: "http://localhost:8081",credentials:true }));
+        this.server.use('/uploads',express.static('uploads'));
     }
 
     setRoutes(){

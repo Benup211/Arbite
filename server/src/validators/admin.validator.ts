@@ -7,4 +7,12 @@ export class AdminValidator {
             body("password").notEmpty().withMessage("Password is required"),
         ];
     }
+    static addRestaurant() {
+        return [
+            body("name").isString().isLength({ min: 3, max: 50 }),
+            body("phone_no").isString().isLength({ min: 10, max: 15 }),
+            body("menu_image").isString().withMessage("Menu image must be a valid image file"),
+            body("location").isString().isLength({ min: 3, max: 100 }),
+        ];
+    }
 }

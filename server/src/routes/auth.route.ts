@@ -11,6 +11,9 @@ class AuthRoute {
     getRoutes() {
         this.router.get("/logout", AuthController.logoutUser);
         this.router.get('/getUser',GlobalMiddleware.CheckAuth,AuthController.getUser);
+        this.router.get('/ongoingOrders',GlobalMiddleware.CheckAuth,AuthController.getAllOngoingOrders);
+        this.router.get('/completedOrders',GlobalMiddleware.CheckAuth,AuthController.getAllCompletedOrders);
+        this.router.get('/allRestaurant',AuthController.getAllRestaurant);
     }
     postRoutes() {
         this.router.post(
@@ -25,6 +28,26 @@ class AuthRoute {
             GlobalMiddleware.CheckValidationResult,
             AuthController.loginUser
         );
+        this.router.post(
+            "/lunchOrders",
+            GlobalMiddleware.CheckAuth,
+            AuthController.getAllLunchOrders
+        )
+        this.router.post(
+            "/completeOrder",
+            GlobalMiddleware.CheckAuth,
+            AuthController.completeOrder
+        )
+        this.router.post(
+            "/addOrder",
+            GlobalMiddleware.CheckAuth,
+            AuthController.createLunchOrder
+        )
+        this.router.post(
+            "/createOrder",
+            GlobalMiddleware.CheckAuth,
+            AuthController.createOrder
+        )
     }
 }
 export default new AuthRoute().router;

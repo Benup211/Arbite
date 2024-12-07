@@ -5,7 +5,6 @@ export class AdminController {
     static async loginAdmin(req: Request, res: Response, next: NextFunction) {
         try {
             const { username, password } = req.body;
-            console.log(username);
             const adminFound = await AdminRepository.findAdminByUsername(
                 username
             );
@@ -59,13 +58,11 @@ export class AdminController {
     }
     static async getAdmin(req: Request, res: Response, next: NextFunction):Promise<any> {
         try {
-            console.log(req.body.adminID);
             const admin = await AdminRepository.findAdminById(req.body.adminID);
             if(!admin){
                 res.clearCookie("AdminToken");
                 next(ResponseService.CreateErrorResponse("admin not found",404));
             }
-            console.log(admin);
             return res.status(200).json({
                 admin: {
                     id: admin?.admin_id,
@@ -80,6 +77,30 @@ export class AdminController {
         try {
             const users = await AdminRepository.findAllUsers();
             return res.status(200).json(users);
+        } catch (error) {
+            next(error);
+        }
+    }
+    static async addRestaurant(req: Request, res: Response, next: NextFunction):Promise<any> {
+        try {
+            const { name, phone_no, location } = req.body;
+            const menu_image=req.file?req.file.path:"";
+            console.log(name,phone_no,menu_image,location);
+            const newRestaurant = await AdminRepository.AddRestaurant(
+                name,
+                phone_no,
+                menu_image,
+                location
+            );
+            return res.status(200).json(newRestaurant);
+        } catch (error) {
+            next(error);
+        }
+    }
+    static async getAllRestaurants(req: Request, res: Response, next: NextFunction):Promise<any> {
+        try {
+            const restaurants = await AdminRepository.findAllRestaurants();
+            return res.status(200).json(restaurants);
         } catch (error) {
             next(error);
         }
